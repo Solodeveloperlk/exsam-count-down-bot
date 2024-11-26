@@ -41,16 +41,16 @@ cmd(
         try {
             // Get current date and time
             const currentDate = new Date();
-            const hours = currentDate.getHours();  // Get current hour
+            const hours = currentDate.getHours(); // Get current hour
 
             // Determine greeting based on time of day
             let greeting = "";
             if (hours >= 0 && hours < 12) {
-                greeting = "Good Morning!";
+                greeting = "⛅️Good Morning!✨";
             } else if (hours >= 12 && hours < 18) {
-                greeting = "Good Evening!";
+                greeting = "☁️Good Evening!✨";
             } else {
-                greeting = "Good Night!";
+                greeting = "🌥Good Night!✨";
             }
 
             // Set default date if no argument is provided
@@ -71,10 +71,20 @@ cmd(
             // Calculate time components
             const daysRemaining = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
             const hoursRemaining = Math.floor(
-                (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+                (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
             );
             const weeksRemaining = Math.floor(daysRemaining / 7);
             const monthsRemaining = Math.floor(daysRemaining / 30);
+
+            // Load the countdown image JSON data (simulated here)
+            const countdownImages = require("./countdown_images.json");  // Adjust path as needed
+
+            // Find the corresponding image based on remaining days
+            const countdownImage = countdownImages[daysRemaining];
+
+            if (!countdownImage) {
+                return reply("⏳ No countdown image found for this day.");
+            }
 
             // Generate the response message with greeting and countdown info
             const message = `
@@ -90,11 +100,11 @@ ${greeting}
 📅 අද: *${currentDate.toLocaleDateString()}*
 `;
 
-            // Send the message
-            await conn.sendMessage(from, { text: message }, { quoted: mek });
+            // Send the countdown image and message
+            await conn.sendMessage(from, { text: message, image: { url: countdownImage.image } }, { quoted: mek });
         } catch (e) {
             console.log(e);
             reply(`${e}`);
         }
-    },
+    }
 );
