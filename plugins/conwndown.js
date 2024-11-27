@@ -54,8 +54,7 @@ cmd(
             }
 
             // Target date set to March 1, 2024, 11:59 PM
-            const targetDate = new Date("2024-03-01T23:59:00");
-
+            const targetDate = new Date("2025-03-01T23:59:00");
             // Calculate the difference in milliseconds
             const timeDifference = targetDate - currentDate;
 
