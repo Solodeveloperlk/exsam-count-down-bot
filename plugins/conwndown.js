@@ -41,24 +41,20 @@ cmd(
         try {
             // Get current date and time
             const currentDate = new Date();
-            const hours = currentDate.getHours();  // Get current hour
+            const hours = currentDate.getHours(); // Get current hour
 
-            // Determine greeting based on time of day
+            // Determine greeting based on the updated time ranges
             let greeting = "";
             if (hours >= 0 && hours < 12) {
                 greeting = "⛅️Good Morning!✨";
             } else if (hours >= 12 && hours < 18) {
-                greeting = "☁️Good Evening!✨";
+                greeting = "☁️Good Afternoon!✨";
             } else {
                 greeting = "🌥Good Night!✨";
             }
 
-            // Set default date if no argument is provided
-            const defaultDate = "2024-12-31";
-            const targetDateStr = q && !isNaN(Date.parse(q)) ? q : defaultDate;
-
-            // Parse the target date
-            const targetDate = new Date(targetDateStr);
+            // Target date set to March 1, 2024, 11:59 PM
+            const targetDate = new Date("2024-03-01T23:59:00");
 
             // Calculate the difference in milliseconds
             const timeDifference = targetDate - currentDate;
