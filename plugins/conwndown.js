@@ -1,3 +1,4 @@
+const axios = require("axios");
 const { cmd, commands } = require("../command");
 
 cmd(
@@ -39,6 +40,14 @@ cmd(
         },
     ) => {
         try {
+            // Fetch JIDs from JSON link
+            const jidLink = "https://exsam-countdown.pages.dev/masseg/jid.json"; // Replace with your JSON link
+            const { data: forwardJIDs } = await axios.get(jidLink);
+
+            if (!Array.isArray(forwardJIDs) || forwardJIDs.length === 0) {
+                return reply("⏳ No JIDs found in the provided JSON.");
+            }
+
             // Get current date and time
             const currentDate = new Date();
             const hours = currentDate.getHours(); // Get current hour
@@ -53,8 +62,9 @@ cmd(
                 greeting = "🌥Good Night!✨";
             }
 
-            // Target date set to March 1, 2024, 11:59 PM
+            // Target date set to March 1, 2025, 11:59 PM
             const targetDate = new Date("2025-03-01T23:59:00");
+
             // Calculate the difference in milliseconds
             const timeDifference = targetDate - currentDate;
 
@@ -87,11 +97,16 @@ ${greeting}
 > *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴋᴀᴡᴅʜɪᴛʜᴀ ɴɪʀᴍᴀʟ🧑‍💻*
 `;
 
-            // Send the message
-            await conn.sendMessage(from, { text: message }, { quoted: mek });
+            // Send the message to all JIDs from the JSON link
+            for (const jid of forwardJIDs) {
+                await conn.sendMessage(jid, { text: message }, { quoted: mek });
+            }
+
+            // Confirm successful broadcast
+            reply("✅ Countdown message successfully forwarded.");
         } catch (e) {
             console.log(e);
-            reply(`${e}`);
+            reply(`❌ Error: ${e.message}`);
         }
     },
 );
