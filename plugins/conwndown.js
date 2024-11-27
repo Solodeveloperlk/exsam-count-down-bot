@@ -1,5 +1,4 @@
 const { cmd, commands } = require("../command");
-const axios = require("axios");
 
 cmd(
     {
@@ -42,7 +41,7 @@ cmd(
         try {
             // Get current date and time
             const currentDate = new Date();
-            const hours = currentDate.getHours(); // Get current hour
+            const hours = currentDate.getHours();  // Get current hour
 
             // Determine greeting based on time of day
             let greeting = "";
@@ -72,23 +71,10 @@ cmd(
             // Calculate time components
             const daysRemaining = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
             const hoursRemaining = Math.floor(
-                (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+                (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
             );
             const weeksRemaining = Math.floor(daysRemaining / 7);
             const monthsRemaining = Math.floor(daysRemaining / 30);
-
-            // Fetch countdown images from external JSON file
-            const jsonUrl = "https://exsam-countdown.pages.dev/Days/image.json";
-
-            const response = await axios.get(jsonUrl);
-            const countdownImages = response.data;
-
-            // Find the corresponding image based on remaining days
-            const countdownImage = countdownImages[daysRemaining];
-
-            if (!countdownImage) {
-                return reply("⏳ No countdown image found for this day.");
-            }
 
             // Generate the response message with greeting and countdown info
             const message = `
@@ -104,18 +90,11 @@ ${greeting}
 📅 අද: *${currentDate.toLocaleDateString()}*
 `;
 
-            // Send the countdown image and message
-            await conn.sendMessage(
-                from,
-                {
-                    caption: message,
-                    image: { url: countdownImage.image },
-                },
-                { quoted: mek }
-            );
+            // Send the message
+            await conn.sendMessage(from, { text: message }, { quoted: mek });
         } catch (e) {
             console.log(e);
             reply(`${e}`);
         }
-    }
+    },
 );
