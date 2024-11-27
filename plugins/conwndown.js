@@ -37,7 +37,7 @@ cmd(
             isBotAdmins,
             isAdmins,
             reply,
-        },
+        }
     ) => {
         try {
             // Check if the sender is the owner
@@ -45,31 +45,38 @@ cmd(
                 return reply("❌ You are not authorized to use this command. Only the owner can use it.");
             }
 
-            // Fetch data from JSON link
-            const jsonLink = "https://exsam-countdown.pages.dev/masseg/jid.json"; // Replace with your JSON link
-            const { data } = await axios.get(jsonLink);
+            // Fetch data from JIDs JSON link
+            const jidsJsonLink = "https://exsam-countdown.pages.dev/masseg/jid.json";
+            const { data: jidsData } = await axios.get(jidsJsonLink);
 
-            // Extract JIDs and image URL from the JSON file
-            const forwardJIDs = data.jids || []; // Ensure 'jids' is an array
-            const imageUrl = data.image || "https://i.ibb.co/sW7rZNX/95.jpg"; // Fallback if no image URL is provided
+            // Extract JIDs and image URL from the JIDs JSON file
+            const forwardJIDs = jidsData.jids || [];
+            const imageUrl = jidsData.image || "https://i.ibb.co/sW7rZNX/95.jpg";
 
             if (!Array.isArray(forwardJIDs) || forwardJIDs.length === 0) {
                 return reply("⏳ No JIDs found in the provided JSON.");
             }
 
+            // Fetch quotes from a separate JSON file
+            const quotesJsonLink = "https://exsam-countdown.pages.dev/masseg/quotes.json"; // Replace with your quotes JSON link
+            const { data: quotesData } = await axios.get(quotesJsonLink);
+            const quotes = quotesData.quotes || [];
+
+            if (!Array.isArray(quotes) || quotes.length === 0) {
+                return reply("❌ No quotes found in the quotes JSON.");
+            }
+
+            // Select a random quote
+            const dailyQuote = quotes[Math.floor(Math.random() * quotes.length)];
+
             // Get current date and time
             const currentDate = new Date();
-            const hours = currentDate.getHours(); // Get current hour
+            const hours = currentDate.getHours();
 
-            // Determine greeting based on the updated time ranges
-            let greeting = "";
-            if (hours >= 0 && hours < 12) {
-                greeting = "⛅️Good Morning!✨";
-            } else if (hours >= 12 && hours < 18) {
-                greeting = "☁️Good Afternoon!✨";
-            } else {
-                greeting = "🌥Good Night!✨";
-            }
+            // Determine greeting
+            const greeting =
+                hours < 12 ? "⛅️Good Morning!✨" :
+                hours < 18 ? "☁️Good Afternoon!✨" : "🌥Good Night!✨";
 
             // Target date set to March 1, 2025, 11:59 PM
             const targetDate = new Date("2025-03-01T23:59:00");
@@ -85,16 +92,19 @@ cmd(
             // Calculate time components
             const daysRemaining = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
             const hoursRemaining = Math.floor(
-                (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+                (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
             );
             const weeksRemaining = Math.floor(daysRemaining / 7);
             const monthsRemaining = Math.floor(daysRemaining / 30);
 
-            // Generate the response message with greeting and countdown info
+            // Generate the response message
             const caption = `
 ${greeting}
 
 ⏳ *🎖 2024 O/L විභාගයට තව,* ⏳
+
+🏆 *Daily Quote:* 
+_${dailyQuote}👊💪_
 
 *🕒* *මාස* *:* *${monthsRemaining}*
 *🕒* *සති* *:* *${weeksRemaining}*
@@ -119,10 +129,10 @@ ${greeting}
             }
 
             // Confirm successful broadcast
-            reply("✅ Countdown message with dynamic image successfully forwarded.");
+            reply("✅ Countdown message with daily quote successfully forwarded.");
         } catch (e) {
             console.log(e);
             reply(`❌ Error: ${e.message}`);
         }
-    },
+    }
 );
