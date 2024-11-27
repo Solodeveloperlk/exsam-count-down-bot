@@ -66,18 +66,35 @@ async (conn, mek, m, { from, isOwner, reply }) => {
 });
 
 // 7. Get Bot JID
-cmd({
-    pattern: "jid",
-    desc: "Get the bot's JID.",
-    category: "owner",
-    react: "🤖",
-    filename: __filename
-},
-async (conn, mek, m, { from, isOwner, reply }) => {
-    if (!isOwner) return reply("❌ You are not the owner!");
-    reply(`🤖 *Bot JID:* ${conn.user.jid}`);
-});
+cmd(
+    {
+        pattern: "jid",
+        desc: "Retrieve the bot's JID.",
+        category: "owner",
+        react: "🤖",
+        filename: __filename,
+    },
+    async (conn, mek, m, { from, isOwner, reply }) => {
+        try {
+            // Check if the sender is the owner
+            if (!isOwner) {
+                return await conn.sendMessage(from, {
+                    text: "❌ You are not authorized to use this command.",
+                });
+            }
 
+            // Respond with the bot's JID
+            await conn.sendMessage(from, {
+                text: `🤖 *Bot JID:* ${conn.user.jid}`,
+            });
+        } catch (e) {
+            console.error(e);
+            await conn.sendMessage(from, {
+                text: `❌ An error occurred: ${e.message}`,
+            });
+        }
+    }
+);
 // 8. Group JIDs List
 cmd({
     pattern: "gjid",
