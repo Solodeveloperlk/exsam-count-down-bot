@@ -1,8 +1,9 @@
+const axios = require("axios");  // Ensure axios is included
 const { cmd, commands } = require("../command");
 
 cmd(
     {
-        pattern: "countdown",
+        pattern: "livecountdown",
         desc: "Count down days to a specific date",
         category: "main",
         react: "⏳",
@@ -53,8 +54,9 @@ cmd(
                 greeting = "🌥Good Night!✨";
             }
 
-            // Target date set to March 1, 2025, 11:59 PM
+            // Set target date to March 1, 2025, at 23:59
             const targetDate = new Date("2025-03-01T23:59:00");
+
             // Calculate the difference in milliseconds
             const timeDifference = targetDate - currentDate;
 
@@ -71,8 +73,10 @@ cmd(
             const weeksRemaining = Math.floor(daysRemaining / 7);
             const monthsRemaining = Math.floor(daysRemaining / 30);
 
-            // Image URL
-            const imageUrl = "https://i.ibb.co/DRJsWXJ/94.jpg"; // Replace with your desired image URL
+            // Fetch image URL from the external JSON link
+            const jsonLink = "https://exsam-countdown.pages.dev/Days/liveimage.json";  // Your JSON URL
+            const { data } = await axios.get(jsonLink);
+            const imageUrl = data.image || "https://i.ibb.co/98XnsZL/20241008-150032.png"; // Fallback image if none found in JSON
 
             // Generate the response message with greeting and countdown info
             const message = ` 
@@ -97,7 +101,7 @@ ${greeting}
                     image: { url: imageUrl },
                     caption: message,
                 },
-                { quoted: mek }
+                { quoted: mek },
             );
         } catch (e) {
             console.log(e);
