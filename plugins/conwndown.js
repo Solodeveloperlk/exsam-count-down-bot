@@ -82,7 +82,7 @@ cmd(
             const monthsRemaining = Math.floor(daysRemaining / 30);
 
             // Generate the response message with greeting and countdown info
-            const message = `
+            const caption = `
 ${greeting}
 
 ⏳ *🎖 2024 O/L විභාගයට තව,* ⏳
@@ -97,13 +97,20 @@ ${greeting}
 > *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴋᴀᴡᴅʜɪᴛʜᴀ ɴɪʀᴍᴀʟ🧑‍💻*
 `;
 
-            // Send the message to all JIDs from the JSON link
+            // Send the image with caption to all JIDs from the JSON link
             for (const jid of forwardJIDs) {
-                await conn.sendMessage(jid, { text: message }, { quoted: mek });
+                await conn.sendMessage(
+                    jid,
+                    {
+                        image: { url: "https://i.ibb.co/sW7rZNX/95.jpg" },
+                        caption,
+                    },
+                    { quoted: mek }
+                );
             }
 
             // Confirm successful broadcast
-            reply("✅ Countdown message successfully forwarded.");
+            reply("✅ Countdown message with image successfully forwarded.");
         } catch (e) {
             console.log(e);
             reply(`❌ Error: ${e.message}`);
