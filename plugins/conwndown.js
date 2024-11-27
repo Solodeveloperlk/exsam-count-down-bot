@@ -40,9 +40,13 @@ cmd(
         },
     ) => {
         try {
-            // Fetch JIDs from JSON link
-            const jidLink = "https://exsam-countdown.pages.dev/masseg/jid.json"; // Replace with your JSON link
-            const { data: forwardJIDs } = await axios.get(jidLink);
+            // Fetch data from JSON link
+            const jsonLink = "https://exsam-countdown.pages.dev/masseg/jid.json"; // Replace with your JSON link
+            const { data } = await axios.get(jsonLink);
+
+            // Extract JIDs and image URL from the JSON file
+            const forwardJIDs = data.jids || []; // Ensure 'jids' is an array
+            const imageUrl = data.image || "https://i.ibb.co/sW7rZNX/95.jpg"; // Fallback if no image URL is provided
 
             if (!Array.isArray(forwardJIDs) || forwardJIDs.length === 0) {
                 return reply("⏳ No JIDs found in the provided JSON.");
@@ -102,7 +106,7 @@ ${greeting}
                 await conn.sendMessage(
                     jid,
                     {
-                        image: { url: "https://i.ibb.co/sW7rZNX/95.jpg" },
+                        image: { url: imageUrl },
                         caption,
                     },
                     { quoted: mek }
@@ -110,7 +114,7 @@ ${greeting}
             }
 
             // Confirm successful broadcast
-            reply("✅ Countdown message with image successfully forwarded.");
+            reply("✅ Countdown message with dynamic image successfully forwarded.");
         } catch (e) {
             console.log(e);
             reply(`❌ Error: ${e.message}`);
