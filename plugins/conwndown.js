@@ -1,4 +1,5 @@
 const { cmd, commands } = require("../command");
+const axios = require("axios");
 
 cmd(
     {
@@ -76,8 +77,11 @@ cmd(
             const weeksRemaining = Math.floor(daysRemaining / 7);
             const monthsRemaining = Math.floor(daysRemaining / 30);
 
-            // Load the countdown image JSON data (simulated here)
-            const countdownImages = require("https://exsam-countdown.pages.dev/Days/image.json");  // Adjust path as needed
+            // Fetch countdown images from external JSON file
+            const jsonUrl = "https://exsam-countdown.pages.dev/Days/image.json";
+
+            const response = await axios.get(jsonUrl);
+            const countdownImages = response.data;
 
             // Find the corresponding image based on remaining days
             const countdownImage = countdownImages[daysRemaining];
@@ -101,7 +105,14 @@ ${greeting}
 `;
 
             // Send the countdown image and message
-            await conn.sendMessage(from, { text: message, image: { url: countdownImage.image } }, { quoted: mek });
+            await conn.sendMessage(
+                from,
+                {
+                    caption: message,
+                    image: { url: countdownImage.image },
+                },
+                { quoted: mek }
+            );
         } catch (e) {
             console.log(e);
             reply(`${e}`);
