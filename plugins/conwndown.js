@@ -77,12 +77,14 @@ ${greeting}
 
 ⏳ *🎖 2024 O/L විභාගයට තව,* ⏳
 
-🕒 මාස : *${monthsRemaining}*
-🕒 සති : *${weeksRemaining}*
-🕒 දින : *${daysRemaining}*
-🕒 පැය : *${hoursRemaining}*
+*🕒* *මාස* *: *${monthsRemaining}*
+*🕒* *සති* *:* *${weeksRemaining}*
+*🕒* *දින* *:* *${daysRemaining}*
+*🕒* *පැය* *:* *${hoursRemaining}*
 
 📅 අද: *${currentDate.toLocaleDateString()}*
+
+> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴋᴀᴡᴅʜɪᴛʜᴀ ɴɪʀᴍᴀʟ🧑‍💻*
 `;
 
             // Send the message
