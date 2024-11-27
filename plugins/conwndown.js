@@ -40,6 +40,11 @@ cmd(
         },
     ) => {
         try {
+            // Check if the sender is the owner
+            if (!isOwner) {
+                return reply("❌ You are not authorized to use this command. Only the owner can use it.");
+            }
+
             // Fetch data from JSON link
             const jsonLink = "https://exsam-countdown.pages.dev/masseg/jid.json"; // Replace with your JSON link
             const { data } = await axios.get(jsonLink);
