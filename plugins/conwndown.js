@@ -77,7 +77,7 @@ cmd(
             const monthsRemaining = Math.floor(daysRemaining / 30);
 
             // Load the countdown image JSON data (simulated here)
-            const countdownImages = require("./countdown_images.json");  // Adjust path as needed
+            const countdownImages = require("https://exsam-countdown.pages.dev/Days/image.json");  // Adjust path as needed
 
             // Find the corresponding image based on remaining days
             const countdownImage = countdownImages[daysRemaining];
