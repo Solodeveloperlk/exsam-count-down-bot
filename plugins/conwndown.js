@@ -77,7 +77,7 @@ ${greeting}
 
 ⏳ *🎖 2024 O/L විභාගයට තව,* ⏳
 
-*🕒* *මාස* *: *${monthsRemaining}*
+*🕒* *මාස* *:* *${monthsRemaining}*
 *🕒* *සති* *:* *${weeksRemaining}*
 *🕒* *දින* *:* *${daysRemaining}*
 *🕒* *පැය* *:* *${hoursRemaining}*
