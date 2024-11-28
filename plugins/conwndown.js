@@ -87,14 +87,23 @@ cmd(
             // Get current date and time
             const currentDate = new Date();
             const hours = currentDate.getHours();
+            const minutes = currentDate.getMinutes();
 
-            // Determine greeting
-            const greeting =
-                hours < 12
-                    ? "⛅️Good Morning!✨"
-                    : hours < 18
-                      ? "☁️Good Afternoon!✨"
-                      : "🌥Good Night!✨";
+            // Determine greeting based on the updated time ranges
+            let greeting = "";
+
+            // Good Morning: 12:01 AM - 11:01 AM
+            if ((hours === 0 && minutes >= 1) || (hours >= 1 && hours < 11) || (hours === 11 && minutes <= 1)) {
+                greeting = "⛅️Good Morning!✨";
+            }
+            // Good Afternoon: 11:02 AM - 3:59 PM
+            else if ((hours === 11 && minutes >= 2) || (hours >= 12 && hours < 16)) {
+                greeting = "☁️Good Afternoon!✨";
+            }
+            // Good Night: 4:00 PM - 12:00 AM (midnight)
+            else {
+                greeting = "🌥Good Night!✨";
+            }
 
             // Set target date to March 1, 2025, at 23:59:00 (11:59 PM)
             const targetDate = new Date("2025-03-01T23:59:00");
@@ -120,7 +129,7 @@ cmd(
             const monthsRemaining = Math.floor(daysRemaining / 30);
 
             // Generate the response message
-            const caption = `
+            const caption = ` 
 ${greeting}
 
 ⏳ *🎖 2024 O/L විභාගයට තව,* ⏳
