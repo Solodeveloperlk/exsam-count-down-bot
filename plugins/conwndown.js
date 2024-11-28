@@ -83,8 +83,9 @@ cmd(
             }
 
             // Select a random quote
-            const dailyQuote =
-                quotes[Math.floor(Math.random() * quotes.length)];
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            const dailyQuote = randomQuote.quote; // Get the quote
+            const emoji = randomQuote.emoji; // Get the emoji
 
             // Get current date and time
             const currentDate = new Date();
@@ -144,7 +145,7 @@ ${greeting}
 ⏳ *🎖 2024 O/L විභාගයට තව,* ⏳
 
 🏆 *Daily Quote:* 
-_*${dailyQuote} ${emoji}*_s
+_*${dailyQuote} ${emoji}*_
 
 *⌛️* *මාස* *:* *${monthsRemaining}*
 *⌛️* *සති*  *:* *${weeksRemaining}*
