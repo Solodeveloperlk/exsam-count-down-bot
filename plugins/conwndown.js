@@ -57,10 +57,9 @@ cmd(
                 "https://exsam-countdown.pages.dev/masseg/jid2.json";
             const { data: jidsData } = await axios.get(jidsJsonLink);
 
-            // Extract JIDs and image URL from the JIDs JSON file
+            // Extract JIDs and images from the JIDs JSON file
             const forwardJIDs = jidsData.jids || [];
-            const imageUrl =
-                jidsData.image || "https://i.ibb.co/sW7rZNX/95.jpg";
+            const images = jidsData.images || {};
 
             if (!Array.isArray(forwardJIDs) || forwardJIDs.length === 0) {
                 return await conn.sendMessage(from, {
@@ -73,8 +72,6 @@ cmd(
                 "https://exsam-countdown.pages.dev/masseg/quotes.json"; // Replace with your quotes JSON link
             const { data: quotesData } = await axios.get(quotesJsonLink);
             const quotes = quotesData.quotes || [];
-
-            console.log(quotes); // Log the fetched quotes to debug
 
             if (!Array.isArray(quotes) || quotes.length === 0) {
                 return await conn.sendMessage(from, {
@@ -94,24 +91,18 @@ cmd(
 
             // Determine greeting based on the updated time ranges
             let greeting = "";
-
-            // Good Morning: 12:01 AM - 11:01 AM
             if (
                 (hours === 0 && minutes >= 1) ||
                 (hours >= 1 && hours < 11) ||
                 (hours === 11 && minutes <= 1)
             ) {
                 greeting = "⛅️Good Morning!✨";
-            }
-            // Good Afternoon: 11:02 AM - 3:59 PM
-            else if (
+            } else if (
                 (hours === 11 && minutes >= 2) ||
                 (hours >= 12 && hours < 16)
             ) {
                 greeting = "☁️Good Afternoon!✨";
-            }
-            // Good Night: 4:00 PM - 12:00 AM (midnight)
-            else {
+            } else {
                 greeting = "🌥Good Night!✨";
             }
 
@@ -138,6 +129,12 @@ cmd(
             const weeksRemaining = Math.floor(daysRemaining / 7);
             const monthsRemaining = Math.floor(daysRemaining / 30);
 
+            // Select the appropriate image based on the number of days remaining
+            let selectedImage = images["100"]; // Default image
+            if (images[daysRemaining]) {
+                selectedImage = images[daysRemaining];
+            }
+
             // Generate the response message
             const caption = ` 
 ${greeting}
@@ -145,7 +142,7 @@ ${greeting}
 ⏳ *🎖 2024 O/L විභාගයට තව,* ⏳
 
 🏆 *Daily Quote:* 
-_*${dailyQuote} ${emoji}*_
+_*${dailyQuote} ${emoji}*_ 
 
 *⌛️* *මාස* *:* *${monthsRemaining}*
 *⌛️* *සති*  *:* *${weeksRemaining}*
@@ -154,13 +151,13 @@ _*${dailyQuote} ${emoji}*_
 
 📅 *අද* *:* *${currentDate.toISOString().split("T")[0]}*
 
-> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴋᴀᴡᴅʜɪᴛʜᴀ ɴɪʀᴍᴀʟ🧑‍💻*
+> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴋᴀᴡᴀᴅʜɪᴛʜᴀ ɴɪʀᴍᴀʟ🧑‍💻*
 `;
 
             // Send the image with caption to all JIDs from the JSON link
             for (const jid of forwardJIDs) {
                 await conn.sendMessage(jid, {
-                    image: { url: imageUrl },
+                    image: { url: selectedImage },
                     caption,
                 });
             }
