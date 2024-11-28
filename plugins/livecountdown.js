@@ -76,7 +76,7 @@ cmd(
 
             // If the date is in the past
             if (timeDifference < 0) {
-                return reply(`⏳ The target date has already passed.`);
+                return reply("⏳ The target date has already passed.");
             }
 
             // Fetch quotes from a separate JSON file
@@ -110,16 +110,18 @@ cmd(
             const weeksRemaining = Math.floor(daysRemaining / 7);
             const monthsRemaining = Math.floor(daysRemaining / 30);
 
-            // Fetch image URL from the external JSON link
+            // Fetch image URL based on days remaining from external JSON link
             const jsonLink =
                 "https://exsam-countdown.pages.dev/Days/liveimage.json"; // Your JSON URL
             const { data } = await axios.get(jsonLink);
-            const imageUrl =
-                data.image || "https://i.ibb.co/98XnsZL/20241008-150032.png"; // Fallback image if none found in JSON
+
+            // Find the image based on the remaining days
+            let imageUrl = data[daysRemaining]
+                ? data[daysRemaining].image
+                : "https://i.ibb.co/98XnsZL/20241008-150032.png"; // Default image if not found
 
             // Generate the response message with greeting and countdown info
-            const message = ` 
-${greeting}
+            const message = `${greeting}
 
 ⏳ *🎖 2024 O/L විභාගයට තව,* ⏳
 
