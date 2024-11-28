@@ -43,14 +43,21 @@ cmd(
             // Get current date and time
             const currentDate = new Date();
             const hours = currentDate.getHours(); // Get current hour
+            const minutes = currentDate.getMinutes(); // Get current minute
 
             // Determine greeting based on the updated time ranges
             let greeting = "";
-            if (hours >= 0 && hours < 12) {
+            
+            // Good Morning: 12:01 AM - 11:01 AM
+            if ((hours === 0 && minutes >= 1) || (hours >= 1 && hours < 11) || (hours === 11 && minutes <= 1)) {
                 greeting = "⛅️Good Morning!✨";
-            } else if (hours >= 12 && hours < 18) {
+            }
+            // Good Afternoon: 11:02 AM - 3:59 PM
+            else if ((hours === 11 && minutes >= 2) || (hours >= 12 && hours < 16)) {
                 greeting = "☁️Good Afternoon!✨";
-            } else {
+            }
+            // Good Night: 4:00 PM - 12:00 AM
+            else {
                 greeting = "🌥Good Night!✨";
             }
 
