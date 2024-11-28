@@ -43,13 +43,13 @@ cmd(
             // Check if the sender is the owner
             if (!isOwner) {
                 return await conn.sendMessage(from, {
-                    text: "❌ You are not authorized to use this command. Only the owner can use it.",
+                    text: "*⚠️මෙම Command බාවිතය නිර්මාණ කරුට පමණක් සීමා වී ඇත,කරුකාකර ඔහුට දැනුම් දෙන්න +94729787759 🚫*",
                 });
             }
 
             // Send initial confirmation message
             await conn.sendMessage(from, {
-                text: "⏳ Starting the countdown broadcast...",
+                text: "⏳ මදක් රැදි සිටින්න , Countdown Massage Seding ආරම්භකර ඇත⏳",
             });
 
             // Fetch data from JIDs JSON link
