@@ -80,7 +80,8 @@ cmd(
             }
 
             // Select a random quote
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            const randomQuote =
+                quotes[Math.floor(Math.random() * quotes.length)];
             const dailyQuote = randomQuote.quote; // Get the quote
             const emoji = randomQuote.emoji; // Get the emoji
 
@@ -107,7 +108,7 @@ cmd(
             }
 
             // Set target date to March 1, 2025, at 23:59:00 (11:59 PM)
-            const targetDate = new Date("2025-03-01T23:59:00");
+            const targetDate = new Date("2025-03-01T00:01:00");
 
             // Calculate the difference in milliseconds
             const timeDifference = targetDate - currentDate;
