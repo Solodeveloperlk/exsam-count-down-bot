@@ -1,4 +1,4 @@
-const axios = require("axios");  // Ensure axios is included
+const axios = require("axios"); // Ensure axios is included
 const { cmd, commands } = require("../command");
 
 cmd(
@@ -65,8 +65,31 @@ cmd(
                 return reply(`⏳ The target date has already passed.`);
             }
 
+            // Fetch quotes from a separate JSON file
+            const quotesJsonLink =
+                "https://exsam-countdown.pages.dev/masseg/quotes.json"; // Replace with your quotes JSON link
+            const { data: quotesData } = await axios.get(quotesJsonLink);
+            const quotes = quotesData.quotes || [];
+
+            console.log(quotes); // Log the fetched quotes to debug
+
+            if (!Array.isArray(quotes) || quotes.length === 0) {
+                return await conn.sendMessage(from, {
+                    text: "❌ No quotes found in the quotes JSON.",
+                });
+            }
+
+            // Randomly select a quote and its emoji
+            const randomQuote =
+                quotes[Math.floor(Math.random() * quotes.length)];
+            console.log(randomQuote); // Log the selected quote and emoji
+            const dailyQuote = randomQuote.quote;
+            const emoji = randomQuote.emoji;
+
             // Calculate time components
-            const daysRemaining = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const daysRemaining = Math.floor(
+                timeDifference / (1000 * 60 * 60 * 24),
+            );
             const hoursRemaining = Math.floor(
                 (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
             );
@@ -74,15 +97,20 @@ cmd(
             const monthsRemaining = Math.floor(daysRemaining / 30);
 
             // Fetch image URL from the external JSON link
-            const jsonLink = "https://exsam-countdown.pages.dev/Days/liveimage.json";  // Your JSON URL
+            const jsonLink =
+                "https://exsam-countdown.pages.dev/Days/liveimage.json"; // Your JSON URL
             const { data } = await axios.get(jsonLink);
-            const imageUrl = data.image || "https://i.ibb.co/98XnsZL/20241008-150032.png"; // Fallback image if none found in JSON
+            const imageUrl =
+                data.image || "https://i.ibb.co/98XnsZL/20241008-150032.png"; // Fallback image if none found in JSON
 
             // Generate the response message with greeting and countdown info
             const message = ` 
 ${greeting}
 
 ⏳ *🎖 2024 O/L විභාගයට තව,* ⏳
+
+🏆 *Daily Quote:* 
+_*${dailyQuote} ${emoji}*_
 
 *🕒* *මාස* *:* *${monthsRemaining}*
 *🕒* *සති* *:* *${weeksRemaining}*
@@ -91,7 +119,7 @@ ${greeting}
 
 📅 *අද* *:* *${currentDate.toISOString().split("T")[0]}*
 
-> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴋᴀᴡᴅʜɪᴛʜᴀ ɴɪʀᴍᴀʟ🧑‍💻*
+> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴋᴀᴡᴅʜʏᴛʜᴀ ɴɪʀᴍᴀʟ🧑‍💻*
 `;
 
             // Send the message with an image and caption
