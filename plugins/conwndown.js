@@ -67,9 +67,23 @@ cmd(
                 });
             }
 
+            // Fetch the target date from a JSON file
+            const targetDateJsonLink =
+                "https://exsam-countdown.pages.dev/Days/targetDate.json"; // Replace with your target date JSON link
+            const { data: targetDateData } = await axios.get(
+                targetDateJsonLink,
+            );
+            const targetDate = new Date(targetDateData.targetDate);
+
+            if (isNaN(targetDate.getTime())) {
+                return await conn.sendMessage(from, {
+                    text: "❌ Invalid target date in the JSON file.",
+                });
+            }
+
             // Fetch quotes from a separate JSON file
             const quotesJsonLink =
-                "https://exsam-countdown.pages.dev/masseg/quotes.json"; // Replace with your quotes JSON link
+                "https://exsam-countdown.pages.dev/masseg/quotes.json";
             const { data: quotesData } = await axios.get(quotesJsonLink);
             const quotes = quotesData.quotes || [];
 
@@ -82,15 +96,15 @@ cmd(
             // Select a random quote
             const randomQuote =
                 quotes[Math.floor(Math.random() * quotes.length)];
-            const dailyQuote = randomQuote.quote; // Get the quote
-            const emoji = randomQuote.emoji; // Get the emoji
+            const dailyQuote = randomQuote.quote;
+            const emoji = randomQuote.emoji;
 
             // Get current date and time
             const currentDate = new Date();
             const hours = currentDate.getHours();
             const minutes = currentDate.getMinutes();
 
-            // Determine greeting based on the updated time ranges
+            // Determine greeting based on the time
             let greeting = "";
             if (
                 (hours === 0 && minutes >= 1) ||
@@ -106,9 +120,6 @@ cmd(
             } else {
                 greeting = "🌥Good Night!✨";
             }
-
-            // Set target date to March 1, 2025, at 23:59:00 (11:59 PM)
-            const targetDate = new Date("2025-03-01T23:59:00");
 
             // Calculate the difference in milliseconds
             const timeDifference = targetDate - currentDate;
@@ -131,13 +142,13 @@ cmd(
             const monthsRemaining = Math.floor(daysRemaining / 30);
 
             // Select the appropriate image based on the number of days remaining
-            let selectedImage = images["100"]; // Default image
+            let selectedImage = images["default"]; // Default image
             if (images[daysRemaining]) {
                 selectedImage = images[daysRemaining];
             }
 
             // Generate the response message
-            const caption = ` 
+            const caption = `
 ${greeting}
 
 ⏳ *🎖 2024 O/L විභාගයට තව,* ⏳
